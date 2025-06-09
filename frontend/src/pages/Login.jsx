@@ -17,7 +17,7 @@ const Login = () => {
         email,
       })
       .then((res) => {
-        console.log("This is data", res.data);
+        
         if (res.data.status) {
           localStorage.setItem('username', res.data.username);
           localStorage.setItem("userId", res.data.userId);

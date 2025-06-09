@@ -5,7 +5,6 @@ import User from "../models/user.model.js";
 export const addNote = async (req, res) => {
   const { title, content, noteType, isEditable, sharedWith } = req.body;
   const createdBy = req.user?.id;
-  console.log(title, content, createdBy);
   try {
     if (!title || !content || !createdBy) {
       return res
@@ -51,7 +50,6 @@ export const addNote = async (req, res) => {
       });
       await newNote.save();
       await newNote.populate("createdBy", "fullName");
-      console.log("Note saved successfully:", newNote);
       return res.status(201).json({
         status: true,
         message: "Note created successfully",
@@ -68,7 +66,7 @@ export const addNote = async (req, res) => {
 
 export const getNotes = async (req, res) => {
   const userId = new mongoose.Types.ObjectId(req.user.id);
-    console.log("userIduserId",userId)
+
   try {
     const notes = await Note.find({
   $or: [
@@ -79,7 +77,6 @@ export const getNotes = async (req, res) => {
 .populate('createdBy', 'fullName')
 .populate('collaborators.userId', 'fullName')
 .sort({ updatedAt: -1 });
-console.log(notes,"Notes")
     return res.status(200).json({
       status: true,
       message: "Notes fetched successfully.",
@@ -148,7 +145,7 @@ const isOwner = existingNote.createdBy.toString() === userId;
       }
       existingNote.collaborators = collaboratorsForDb;
       await existingNote.save();
-      console.log("Note successfully updated in the database:", existingNote);
+
       const updatedNoteWithPopulatedCreator = await Note.findById(
         existingNote._id
       ).populate("createdBy", "fullName");
@@ -217,20 +214,17 @@ export const deleteNote = async (req, res) => {
 
 export const checkNotification = async(req,res)=>{
    const authenticatedUserId = req.user.id;
-   console.log('authenticatedUserId in checknotification',authenticatedUserId)
+
    try {
         const userIdObjectId = new mongoose.Types.ObjectId(authenticatedUserId);
-   console.log('authenticatedUserId in checknotification2',userIdObjectId)
 
         const currentUser = await User.findById(userIdObjectId);
-   console.log('authenticatedUserId in checknotification3',currentUser)
 
         if (!currentUser) {
             return res.status(404).json({ status: false, message: "User not found." });
         }
 
         const lastChecked = currentUser.lastCheckedNotificationsAt;
-   console.log('authenticatedUserId in checknotification 4',lastChecked)
 
         const newNotifications = await Note.find({
             'collaborators.userId': userIdObjectId,
@@ -241,7 +235,6 @@ export const checkNotification = async(req,res)=>{
         .sort({ updatedAt: -1 });
 
          currentUser.lastCheckedNotificationsAt = new Date();
-            console.log('authenticatedUserId in checknotification 5',currentUser)
 
         await currentUser.save();
 
@@ -274,7 +267,6 @@ export const getAllNotifications = async (req, res) => {
         })
         .populate('createdBy', 'fullName')
         .sort({ updatedAt: -1 });
-        console.log('Returning notifications',notifications)
 
         return res.status(200).json({
             status: true,

@@ -40,8 +40,7 @@ const userId = localStorage.getItem("userId");
       );
       if (response.data.status) {
         const fetchedNotes = response.data.notes || [];
-        console.log("Fetched notes", fetchedNotes);
-        console.log("User ID", userId);
+
 
         fetchedNotes.forEach((note) => {
           console.log("Note:", note.title);
@@ -85,7 +84,6 @@ const fetchAllNotifications = useCallback(async () => {
     try {
         const userId = localStorage.getItem("userId");
         if (!userId) return;
-console.log("User ID in fetchAllNotifications:", userId);
         const response = await axios.get(
             `${import.meta.env.VITE_SERVER_URL}/notes/all-notifications`,
             { withCredentials: true }
@@ -211,20 +209,7 @@ console.log("User ID in fetchNotificationCount:", userId);
           { ...noteData, createdBy: currentUserId },
           { withCredentials: true }
         );
-        //   savedNote = response.data.note
-        //   console.log(savedNote)
-        //   setNotes((prevNotes) => {
-        //   const updatedNotes = prevNotes.map((note) =>
-        //     note._id === editingNote._id
-        //       ? { ...note, ...savedNote }
-        //       : note
-        //   )
-        //   return updatedNotes.sort((a, b) => {
-        //     const dateA = new Date(a.updatedAt || a.createdAt);
-        //     const dateB = new Date(b.updatedAt || b.createdAt);
-        //     return dateB.getTime() - dateA.getTime();
-        //   });
-        // })
+
       } else {
         response = await axios.post(
           `${import.meta.env.VITE_SERVER_URL}/notes/add-note`,
@@ -232,17 +217,7 @@ console.log("User ID in fetchNotificationCount:", userId);
           { withCredentials: true }
         );
       }
-      // savedNote = response.data.note;
-      // setNotes((prevNotes) => {
-      //         const newNotes = [savedNote, ...prevNotes];
-      //         return newNotes.sort((a, b) => {
-      //           const dateA = new Date(a.updatedAt || a.createdAt);
-      //           const dateB = new Date(b.updatedAt || b.createdAt);
-      //           return dateB.getTime() - dateA.getTime();
-      //         });
-      //         });
-      //     }
-
+      
       if (response.data.status) {
         fetchNotes();
         handleCloseModal();
