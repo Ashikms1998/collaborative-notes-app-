@@ -17,7 +17,7 @@ const Login = () => {
         email,
       })
       .then((res) => {
-        
+
         if (res.data.status) {
           localStorage.setItem('username', res.data.username);
           localStorage.setItem("userId", res.data.userId);
@@ -77,7 +77,7 @@ const Login = () => {
             </button>
             <p>
               Don't have an account?
-              <Link to="/sign-up">
+              <Link to="/">
                 <span className="font-semibold">Sign Up</span>
               </Link>
             </p>
