@@ -49,7 +49,7 @@ export const userLogin = async (req, res) => {
   const secret = process.env.ACCESS_TOKEN_SECRET;
   try {
     const user = await User.findOne({ email });
-    
+
     if (!user) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
@@ -72,7 +72,7 @@ export const userLogin = async (req, res) => {
         expiresIn: "1h",
       }
     );
-    res.cookie("token", token, { httpOnly: true, maxAge: 3600000 });
+    res.cookie("token", token, { httpOnly: true,sameSite: 'None',secure: process.env.NODE_ENV === 'production', maxAge: 3600000 });
     return res.status(200).json({
       status: true,
       message: "login successfully",
